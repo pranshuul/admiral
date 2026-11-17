@@ -1,0 +1,6 @@
+[package]
+name = "admiral-board"
+description = "The board's transports, posts, tracked replies, ownership and leases, contract diffs"
+version.workspace = true
+edition.workspace = true
+license.workspace = true

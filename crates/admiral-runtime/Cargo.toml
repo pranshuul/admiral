@@ -1,0 +1,6 @@
+[package]
+name = "admiral-runtime"
+description = "next and advance, script execution, run state and hash chain, attempts, evidence, budgets, directives, liveness, parallel children, memoization, composition"
+version.workspace = true
+edition.workspace = true
+license.workspace = true

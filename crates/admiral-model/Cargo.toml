@@ -1,0 +1,6 @@
+[package]
+name = "admiral-model"
+description = "Typed structs for every file format and JSON message, with serde and generated JSON Schemas"
+version.workspace = true
+edition.workspace = true
+license.workspace = true

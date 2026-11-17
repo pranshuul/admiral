@@ -3,6 +3,14 @@
 version = 4
 
 [[package]]
+name = "admiral-adapter"
+version = "0.1.0"
+
+[[package]]
+name = "admiral-board"
+version = "0.1.0"
+
+[[package]]
 name = "admiral-cli"
 version = "0.1.0"
 dependencies = [
@@ -10,6 +18,50 @@ dependencies = [
  "clap",
  "toml",
 ]
+
+[[package]]
+name = "admiral-config"
+version = "0.1.0"
+
+[[package]]
+name = "admiral-dashboard"
+version = "0.1.0"
+
+[[package]]
+name = "admiral-decider"
+version = "0.1.0"
+
+[[package]]
+name = "admiral-lifecycle"
+version = "0.1.0"
+
+[[package]]
+name = "admiral-model"
+version = "0.1.0"
+
+[[package]]
+name = "admiral-observe"
+version = "0.1.0"
+
+[[package]]
+name = "admiral-runtime"
+version = "0.1.0"
+
+[[package]]
+name = "admiral-scan"
+version = "0.1.0"
+
+[[package]]
+name = "admiral-store"
+version = "0.1.0"
+
+[[package]]
+name = "admiral-tui"
+version = "0.1.0"
+
+[[package]]
+name = "admiral-validate"
+version = "0.1.0"
 
 [[package]]
 name = "anstream"

@@ -1,7 +1,20 @@
 [workspace]
 resolver = "3"
 members = [
+    "crates/admiral-model",
+    "crates/admiral-config",
+    "crates/admiral-store",
+    "crates/admiral-scan",
+    "crates/admiral-adapter",
+    "crates/admiral-validate",
+    "crates/admiral-runtime",
+    "crates/admiral-decider",
     "crates/admiral-cli",
+    "crates/admiral-tui",
+    "crates/admiral-lifecycle",
+    "crates/admiral-board",
+    "crates/admiral-dashboard",
+    "crates/admiral-observe",
 ]
 
 [workspace.package]

@@ -1,0 +1,6 @@
+[package]
+name = "admiral-store"
+description = "Content-addressed store, tree hashing, sources, discovery by convention, lockfiles, publish, install, adopt, update"
+version.workspace = true
+edition.workspace = true
+license.workspace = true

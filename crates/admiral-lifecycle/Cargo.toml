@@ -1,0 +1,6 @@
+[package]
+name = "admiral-lifecycle"
+description = "Setup and teardown: tool and authorization planning, provisioning, removal, residue reports, post-mortems"
+version.workspace = true
+edition.workspace = true
+license.workspace = true

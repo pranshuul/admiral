@@ -1,0 +1,6 @@
+[package]
+name = "admiral-observe"
+description = "The optional usage observer"
+version.workspace = true
+edition.workspace = true
+license.workspace = true

@@ -1,3 +1,9 @@
+use clap::Parser;
+
+#[derive(Parser)]
+#[command(name = "admiral", version)]
+struct Cli {}
+
 fn main() {
-    todo!("red");
+    Cli::parse();
 }
