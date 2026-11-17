@@ -4,3 +4,6 @@ description = "next and advance, script execution, run state and hash chain, att
 version.workspace = true
 edition.workspace = true
 license.workspace = true
+
+[lints]
+workspace = true

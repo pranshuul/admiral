@@ -26,3 +26,9 @@ license = "Apache-2.0"
 assert_cmd = "2"
 clap = { version = "4", features = ["derive"] }
 toml = "0.9"
+
+[workspace.lints.rust]
+warnings = "deny"
+
+[workspace.lints.clippy]
+all = { level = "deny", priority = -1 }

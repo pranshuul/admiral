@@ -4,3 +4,6 @@ description = "Terminal UI and the live graph view"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
+
+[lints]
+workspace = true

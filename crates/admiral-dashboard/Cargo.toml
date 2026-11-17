@@ -4,3 +4,6 @@ description = "Pinned panel rendering over the shared component catalog package,
 version.workspace = true
 edition.workspace = true
 license.workspace = true
+
+[lints]
+workspace = true
