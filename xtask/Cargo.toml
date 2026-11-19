@@ -9,5 +9,9 @@ publish = false
 [dependencies]
 admiral-model = { path = "../crates/admiral-model" }
 
+[dev-dependencies]
+tempfile = "3"
+toml.workspace = true
+
 [lints]
 workspace = true
