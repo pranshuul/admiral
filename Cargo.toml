@@ -15,6 +15,7 @@ members = [
     "crates/admiral-board",
     "crates/admiral-dashboard",
     "crates/admiral-observe",
+    "tests/fixtures",
     "tests/harness",
     "xtask",
 ]
