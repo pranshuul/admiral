@@ -29,22 +29,19 @@ fn strings(table: &toml::Table, key: &str) -> Vec<String> {
         .collect()
 }
 
+// Targets, owner and generate-check rule: /decisions.md, 2026-11-19, issue #23.
 #[test]
-fn dist_builds_static_linux_and_macos_binaries() {
-    let targets = strings(&dist_table(), "targets");
-    for target in [
-        "x86_64-unknown-linux-musl",
-        "aarch64-unknown-linux-musl",
-        "aarch64-apple-darwin",
-    ] {
-        assert!(targets.iter().any(|t| t == target), "missing {target}");
-    }
-    assert!(
-        targets
-            .iter()
-            .filter(|t| t.contains("linux"))
-            .all(|t| t.ends_with("-musl")),
-        "Linux targets must be statically linked (musl)"
+fn dist_builds_static_linux_and_both_macos_binaries() {
+    let mut targets = strings(&dist_table(), "targets");
+    targets.sort();
+    assert_eq!(
+        targets,
+        [
+            "aarch64-apple-darwin",
+            "aarch64-unknown-linux-musl",
+            "x86_64-apple-darwin",
+            "x86_64-unknown-linux-musl",
+        ]
     );
 }
 
@@ -58,8 +55,7 @@ fn dist_produces_shell_installer_and_homebrew_formula() {
 #[test]
 fn dist_publishes_to_a_homebrew_tap_named_admiral() {
     let table = dist_table();
-    let tap = table["tap"].as_str().expect("tap");
-    assert!(tap.ends_with("/homebrew-tap"), "tap is {tap}");
+    assert_eq!(table["tap"].as_str(), Some("pranshuul/homebrew-tap"));
     assert_eq!(table["formula"].as_str(), Some("admiral"));
     assert!(strings(&table, "publish-jobs").contains(&"homebrew".to_owned()));
 }
@@ -109,16 +105,37 @@ fn released_package_names_repository_and_homepage() {
     let package = workspace["workspace"]["package"]
         .as_table()
         .expect("package");
-    assert!(
-        package["repository"]
-            .as_str()
-            .expect("repository")
-            .starts_with("https://github.com/")
+    assert_eq!(
+        package["repository"].as_str(),
+        Some("https://github.com/pranshuul/admiral")
     );
-    assert!(package.contains_key("homepage"));
+    assert_eq!(
+        package["homepage"].as_str(),
+        Some("https://github.com/pranshuul/admiral")
+    );
     let cli = read("crates/admiral-cli/Cargo.toml");
     assert!(cli.contains("repository.workspace = true"));
     assert!(cli.contains("homepage.workspace = true"));
+}
+
+#[test]
+fn ci_fails_when_the_release_workflow_is_not_what_dist_generates() {
+    let version = dist_table()["cargo-dist-version"]
+        .as_str()
+        .expect("version")
+        .to_owned();
+    let ci = read(".github/workflows/ci.yml");
+    assert!(
+        ci.contains(&format!(
+            "https://github.com/axodotdev/cargo-dist/releases/download/v{version}/cargo-dist-installer.sh"
+        )),
+        "CI installs the pinned dist {version}"
+    );
+    assert!(
+        ci.lines()
+            .any(|l| l.trim() == "- run: dist generate --check"),
+        "CI runs dist generate --check"
+    );
 }
 
 fn ops(args: &[&str], gh: Option<&Path>) -> Output {
