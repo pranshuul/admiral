@@ -1,0 +1,281 @@
+{
+  "$defs": {
+    "Audience": {
+      "description": "Which content a lock applies to.",
+      "enum": [
+        "human",
+        "machine",
+        "any"
+      ],
+      "type": "string"
+    },
+    "Budget": {
+      "description": "Workflow-level budget limits, each a numeric limit.",
+      "properties": {
+        "cost_usd": {
+          "format": "double",
+          "type": [
+            "number",
+            "null"
+          ],
+          "x-combine": "minimum"
+        },
+        "rounds": {
+          "format": "uint32",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ],
+          "x-combine": "minimum"
+        },
+        "tokens": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ],
+          "x-combine": "minimum"
+        }
+      },
+      "type": "object"
+    },
+    "Enforce": {
+      "description": "How a lock is enforced.",
+      "enum": [
+        "context",
+        "hook",
+        "both"
+      ],
+      "type": "string"
+    },
+    "Evidence": {
+      "description": "Evidence tier, loosest first.",
+      "enum": [
+        "asserted",
+        "heuristic",
+        "reported",
+        "verified"
+      ],
+      "type": "string"
+    },
+    "Lock": {
+      "description": "One `[[lock]]` entry.",
+      "properties": {
+        "audience": {
+          "$ref": "#/$defs/Audience"
+        },
+        "enforce": {
+          "$ref": "#/$defs/Enforce"
+        },
+        "mandatory": {
+          "description": "An organization lock marked mandatory cannot be skipped.",
+          "type": "boolean"
+        },
+        "on_disagree": {
+          "$ref": "#/$defs/OnDisagree",
+          "default": "rewrite"
+        },
+        "skill": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "skill",
+        "audience",
+        "enforce"
+      ],
+      "type": "object"
+    },
+    "OnDisagree": {
+      "description": "What happens when a hook's output differs from the model's.",
+      "enum": [
+        "rewrite",
+        "warn",
+        "fail"
+      ],
+      "type": "string"
+    },
+    "Scan": {
+      "description": "Scanner policy.",
+      "properties": {
+        "threshold": {
+          "description": "Highest score (0–100) an item may have; the lower, the stricter.",
+          "format": "uint8",
+          "maximum": 100,
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ],
+          "x-combine": "strictest",
+          "x-strictest": "lowest"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "The `config/1` document.",
+  "properties": {
+    "allow_headless_deploy": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "x-combine": "and"
+    },
+    "budget": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Budget"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "credential_names": {
+      "items": {
+        "type": "string"
+      },
+      "type": [
+        "array",
+        "null"
+      ],
+      "x-combine": "intersection"
+    },
+    "decider_backends": {
+      "items": {
+        "type": "string"
+      },
+      "type": [
+        "array",
+        "null"
+      ],
+      "x-combine": "intersection"
+    },
+    "deploy_enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "x-combine": "and"
+    },
+    "deploy_targets": {
+      "items": {
+        "type": "string"
+      },
+      "type": [
+        "array",
+        "null"
+      ],
+      "x-combine": "intersection"
+    },
+    "discovery_sources": {
+      "items": {
+        "type": "string"
+      },
+      "type": [
+        "array",
+        "null"
+      ],
+      "x-combine": "intersection"
+    },
+    "forbidden_tools": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "x-combine": "union"
+    },
+    "lock": {
+      "items": {
+        "$ref": "#/$defs/Lock"
+      },
+      "type": "array",
+      "x-combine": "union"
+    },
+    "max_attempts": {
+      "format": "uint32",
+      "minimum": 0,
+      "type": [
+        "integer",
+        "null"
+      ],
+      "x-combine": "minimum"
+    },
+    "max_concurrency": {
+      "format": "uint32",
+      "minimum": 0,
+      "type": [
+        "integer",
+        "null"
+      ],
+      "x-combine": "minimum"
+    },
+    "max_loops": {
+      "format": "uint32",
+      "minimum": 0,
+      "type": [
+        "integer",
+        "null"
+      ],
+      "x-combine": "minimum"
+    },
+    "min_evidence": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Evidence"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "x-combine": "strictest",
+      "x-levels": [
+        "asserted",
+        "heuristic",
+        "reported",
+        "verified"
+      ]
+    },
+    "models": {
+      "items": {
+        "type": "string"
+      },
+      "type": [
+        "array",
+        "null"
+      ],
+      "x-combine": "intersection"
+    },
+    "network_allowed": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "x-combine": "and"
+    },
+    "required_approvals": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "x-combine": "union"
+    },
+    "scan": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Scan"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "title": "config/1",
+  "type": "object"
+}

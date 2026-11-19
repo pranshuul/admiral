@@ -25,13 +25,25 @@ pub enum Combine {
 impl Combine {
     /// The annotation value written in the schema.
     pub fn as_str(self) -> &'static str {
-        todo!("red")
+        match self {
+            Combine::Union => "union",
+            Combine::Minimum => "minimum",
+            Combine::And => "and",
+            Combine::Strictest => "strictest",
+            Combine::Intersection => "intersection",
+        }
     }
 
     /// Parses an annotation value.
     pub fn parse(text: &str) -> Option<Combine> {
-        let _ = text;
-        todo!("red")
+        match text {
+            "union" => Some(Combine::Union),
+            "minimum" => Some(Combine::Minimum),
+            "and" => Some(Combine::And),
+            "strictest" => Some(Combine::Strictest),
+            "intersection" => Some(Combine::Intersection),
+            _ => None,
+        }
     }
 }
 
@@ -167,5 +179,5 @@ pub struct Config {
 
 /// The `config/1` JSON Schema as a JSON value, including the `x-combine` annotations.
 pub fn config_schema() -> serde_json::Value {
-    todo!("red")
+    schemars::schema_for!(Config).to_value()
 }
