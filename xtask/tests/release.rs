@@ -89,9 +89,7 @@ fn release_workflow_runs_on_version_tags_and_attests() {
     let workflow = read(".github/workflows/release.yml");
     assert!(workflow.contains("push:"));
     assert!(workflow.contains("tags:"));
-    assert!(
-        workflow.contains("attestations: \"write\"") || workflow.contains("attestations: write")
-    );
+    assert!(workflow.contains("\"attestations\": \"write\""));
     assert!(workflow.contains("actions/attest"));
     assert!(workflow.contains("HOMEBREW_TAP_TOKEN"));
     assert!(workflow.contains("musl"));
