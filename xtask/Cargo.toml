@@ -1,0 +1,13 @@
+[package]
+name = "xtask"
+description = "Repository maintenance commands, run as cargo xtask"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish = false
+
+[dependencies]
+admiral-model = { path = "../crates/admiral-model" }
+
+[lints]
+workspace = true
