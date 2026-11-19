@@ -25,3 +25,11 @@ jobs:
       - run: cargo clippy --all-targets -- -D warnings
       - run: cargo fmt --check
       - run: cargo xtask schemas-check
+
+  release-workflow:
+    name: release workflow matches dist
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: "curl --proto '=https' --tlsv1.2 -LsSf https://github.com/axodotdev/cargo-dist/releases/download/v0.34.0/cargo-dist-installer.sh | sh"
+      - run: dist generate --check

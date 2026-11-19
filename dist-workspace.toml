@@ -2,7 +2,9 @@
 members = ["cargo:."]
 
 # Release tooling: https://github.com/axodotdev/cargo-dist (now `dist`).
-# After changing this file run `dist generate` to refresh .github/workflows/release.yml.
+# After changing this file run `dist generate` to refresh .github/workflows/release.yml;
+# CI runs `dist generate --check`, so a stale or hand-edited workflow fails.
+# Owner, tap, targets and attestation signing: /decisions.md, 2026-11-19, issue #23.
 [dist]
 cargo-dist-version = "0.34.0"
 ci = "github"
