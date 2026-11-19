@@ -4,6 +4,8 @@ description = "Command parsing, JSON and human output, error codes"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
+repository.workspace = true
+homepage.workspace = true
 
 [[bin]]
 name = "admiral"

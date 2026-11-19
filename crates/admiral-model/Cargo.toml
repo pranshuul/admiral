@@ -4,6 +4,8 @@ description = "Typed structs for every file format and JSON message, with serde 
 version.workspace = true
 edition.workspace = true
 license.workspace = true
+repository.workspace = true
+homepage.workspace = true
 
 [lints]
 workspace = true

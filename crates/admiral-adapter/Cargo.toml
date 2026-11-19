@@ -4,6 +4,8 @@ description = "The adapter trait, the adapter/1 capability manifest, the Claude 
 version.workspace = true
 edition.workspace = true
 license.workspace = true
+repository.workspace = true
+homepage.workspace = true
 
 [lints]
 workspace = true

@@ -1,0 +1,21 @@
+[workspace]
+members = ["cargo:."]
+
+# Release tooling: https://github.com/axodotdev/cargo-dist (now `dist`).
+# After changing this file run `dist generate` to refresh .github/workflows/release.yml.
+[dist]
+cargo-dist-version = "0.34.0"
+ci = "github"
+installers = ["shell", "homebrew"]
+targets = [
+    "x86_64-unknown-linux-musl",
+    "aarch64-unknown-linux-musl",
+    "aarch64-apple-darwin",
+    "x86_64-apple-darwin",
+]
+tap = "pranshuul/homebrew-tap"
+formula = "admiral"
+publish-jobs = ["homebrew"]
+checksum = "sha256"
+github-attestations = true
+install-path = "CARGO_HOME"

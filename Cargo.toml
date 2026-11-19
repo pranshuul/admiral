@@ -22,6 +22,8 @@ members = [
 version = "0.1.0"
 edition = "2024"
 license = "Apache-2.0"
+repository = "https://github.com/pranshuul/admiral"
+homepage = "https://github.com/pranshuul/admiral"
 
 [workspace.dependencies]
 assert_cmd = "2"
