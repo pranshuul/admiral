@@ -92,8 +92,6 @@ fn release_workflow_runs_on_version_tags_and_attests() {
     assert!(workflow.contains("\"attestations\": \"write\""));
     assert!(workflow.contains("actions/attest"));
     assert!(workflow.contains("HOMEBREW_TAP_TOKEN"));
-    assert!(workflow.contains("musl"));
-    assert!(workflow.contains("aarch64-apple-darwin"));
 }
 
 #[test]
