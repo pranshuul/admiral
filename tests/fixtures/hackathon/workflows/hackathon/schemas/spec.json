@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "contracts": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "env_vars": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "folders": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "type": "object"
+    },
+    "summary": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "summary",
+    "contracts",
+    "folders",
+    "env_vars"
+  ],
+  "title": "Specification",
+  "type": "object"
+}

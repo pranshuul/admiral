@@ -1,0 +1,20 @@
+# Curated starting list for the scouting step.
+[[source]]
+kind = "github"
+query = "hackathon winners {track} in:readme"
+purpose = "Public repositories of winning submissions in the chosen tracks"
+
+[[source]]
+kind = "registry:npm"
+query = "{sponsor} sdk"
+purpose = "Sponsor SDKs and quickstarts"
+
+[[source]]
+kind = "registry:pypi"
+query = "{sponsor} client"
+purpose = "Sponsor client libraries"
+
+[[source]]
+kind = "web"
+query = "{sponsor} quickstart"
+purpose = "Sponsor documentation and starter templates"

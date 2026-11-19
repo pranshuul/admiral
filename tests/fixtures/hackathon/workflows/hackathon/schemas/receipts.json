@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "honest_limits": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "readme_sections": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "source_hash": {
+      "type": "string"
+    },
+    "track_mapping": {
+      "additionalProperties": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "type": "object"
+    }
+  },
+  "required": [
+    "readme_sections",
+    "track_mapping",
+    "honest_limits",
+    "source_hash"
+  ],
+  "title": "Receipts",
+  "type": "object"
+}

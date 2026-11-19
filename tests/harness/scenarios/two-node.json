@@ -1,0 +1,22 @@
+{
+  "format": "scenario/1",
+  "name": "two-node",
+  "steps": [
+    {
+      "expect_next": { "node": "plan", "kind": "agent", "task": "write the plan" },
+      "advance": {
+        "node": "plan",
+        "result": { "plan": "one step" },
+        "expect": { "node": "build", "kind": "agent", "task": "build the plan" }
+      }
+    },
+    {
+      "expect_next": { "node": "build", "kind": "agent", "task": "build the plan" },
+      "advance": {
+        "node": "build",
+        "result": { "built": true },
+        "expect": { "node": "done", "kind": "end" }
+      }
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+[package]
+name = "admiral-decider"
+description = "The decider interface, payload projection, OpenAI-compatible and decision-format backends, bench, calibration"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+
+[lints]
+workspace = true

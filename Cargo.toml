@@ -1,0 +1,39 @@
+[workspace]
+resolver = "3"
+members = [
+    "crates/admiral-model",
+    "crates/admiral-config",
+    "crates/admiral-store",
+    "crates/admiral-scan",
+    "crates/admiral-adapter",
+    "crates/admiral-validate",
+    "crates/admiral-runtime",
+    "crates/admiral-decider",
+    "crates/admiral-cli",
+    "crates/admiral-tui",
+    "crates/admiral-lifecycle",
+    "crates/admiral-board",
+    "crates/admiral-dashboard",
+    "crates/admiral-observe",
+    "tests/fixtures",
+    "tests/harness",
+    "xtask",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+license = "Apache-2.0"
+repository = "https://github.com/pranshuul/admiral"
+homepage = "https://github.com/pranshuul/admiral"
+
+[workspace.dependencies]
+assert_cmd = "2"
+clap = { version = "4", features = ["derive"] }
+toml = "0.9"
+
+[workspace.lints.rust]
+warnings = "deny"
+
+[workspace.lints.clippy]
+all = { level = "deny", priority = -1 }

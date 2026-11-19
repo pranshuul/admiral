@@ -1,0 +1,11 @@
+[package]
+name = "admiral-dashboard"
+description = "Pinned panel rendering over the shared component catalog package, the dashboard server and phone pairing"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+
+[lints]
+workspace = true

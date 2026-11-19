@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "ranking": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "reasons": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "ranking",
+    "reasons"
+  ],
+  "title": "Idea ranking question",
+  "type": "object"
+}

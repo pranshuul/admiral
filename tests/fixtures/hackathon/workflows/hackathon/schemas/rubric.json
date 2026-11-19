@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "deploy_healthy": {
+      "type": "boolean"
+    },
+    "human_minutes": {
+      "minimum": 0,
+      "type": "number"
+    },
+    "interruptions": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "rubric_coverage": {
+      "maximum": 1,
+      "minimum": 0,
+      "type": "number"
+    },
+    "tests_pass": {
+      "type": "boolean"
+    },
+    "track_checklist_complete": {
+      "maximum": 1,
+      "minimum": 0,
+      "type": "number"
+    }
+  },
+  "required": [
+    "rubric_coverage",
+    "tests_pass",
+    "deploy_healthy",
+    "track_checklist_complete",
+    "human_minutes",
+    "interruptions"
+  ],
+  "title": "Hackathon scoring rubric",
+  "type": "object"
+}

@@ -1,0 +1,9 @@
+{
+  "name": "solo-fixture",
+  "params": { "mode": "solo" },
+  "prompt": "Build a tool that summarises a pull request for a reviewer. Judged on usefulness, polish and use of the sponsor API. Deadline: 2026-01-01T12:00:00Z.",
+  "expect": {
+    "outcome": "submitted",
+    "interruptions": 4
+  }
+}
