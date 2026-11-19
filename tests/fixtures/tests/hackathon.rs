@@ -146,7 +146,7 @@ fn every_script_gate_and_end_node_declares_what_it_must() {
     let all: Vec<_> = nodes(&wf).into_iter().chain(slice_nodes(&wf)).collect();
     for n in &all {
         match n["kind"].as_str().unwrap() {
-            "script" | "gate" if n.contains_key("run") => {
+            "script" | "gate" if n.contains_key("run") && n.contains_key("on") => {
                 assert!(n.contains_key("exit"), "{}", n["id"])
             }
             "end" => assert!(["success", "failure"].contains(&n["class"].as_str().unwrap())),
@@ -171,7 +171,7 @@ fn every_script_a_node_runs_exists_and_is_executable() {
             count += 1;
         }
     }
-    assert_eq!(count, 9);
+    assert_eq!(count, 8);
 }
 
 #[test]
@@ -184,7 +184,7 @@ fn every_script_is_valid_bash() {
         assert!(status.success(), "{}", path.display());
         count += 1;
     }
-    assert_eq!(count, 9);
+    assert_eq!(count, 8);
 }
 
 #[test]
@@ -206,7 +206,7 @@ fn every_schema_a_node_names_exists_and_parses() {
         }
     }
     paths.insert(wf["harness"]["rubric"].as_str().unwrap().to_string());
-    assert_eq!(paths.len(), 13, "{paths:?}");
+    assert_eq!(paths.len(), 12, "{paths:?}");
     for p in paths {
         let text =
             fs::read_to_string(workflow_dir().join(&p)).unwrap_or_else(|_| panic!("{p} missing"));

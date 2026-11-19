@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "deadline": {
+      "type": "string"
+    },
+    "demo_format": {
+      "enum": [
+        "live",
+        "video",
+        "both"
+      ],
+      "type": "string"
+    },
+    "scouting_picks": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "submission_deadline": {
+      "type": "string"
+    },
+    "team_skills": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "timezone": {
+      "type": "string"
+    },
+    "track_strategy": {
+      "enum": [
+        "one",
+        "stack",
+        "decide"
+      ],
+      "type": "string"
+    },
+    "uncertain_facts": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "deadline",
+    "submission_deadline",
+    "timezone",
+    "demo_format",
+    "track_strategy"
+  ],
+  "title": "Kickoff answers",
+  "type": "object"
+}

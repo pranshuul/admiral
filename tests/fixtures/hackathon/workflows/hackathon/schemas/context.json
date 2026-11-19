@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "problem": {
+      "type": "string"
+    },
+    "rubric": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "sponsor_apis": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "submission_fields": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "tracks": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "problem",
+    "rubric",
+    "tracks",
+    "sponsor_apis",
+    "submission_fields"
+  ],
+  "title": "Hackathon context",
+  "type": "object"
+}

@@ -1,0 +1,256 @@
+[workflow]
+name    = "hackathon"
+version = "0.5.0"
+entry   = "ingest"
+modes   = ["interactive"]
+
+[defaults]
+route = { model = "sonnet", effort = "medium" }
+
+[params.mode]                       # required, no default: becomes the first question
+type   = "enum"
+values = ["solo", "team"]
+
+[workflow.budget]
+until   = "context:deadline"        # code freeze, confirmed at kickoff
+warn_at = 0.8
+
+[harness]
+interruptions = 4                   # mode, kickoff, idea pick, submission review
+eval          = "evals/"            # fixtures and rubric run before each release
+rubric        = "schemas/rubric.json"
+
+[tools.gh]
+version = "2.62.0"
+source  = "release:cli/cli"
+purpose = "The team board, pull requests and the submission tag"
+
+[tools.vhs]
+version = "0.9.0"
+source  = "release:charmbracelet/vhs"
+when    = "params:demo_format != 'live'"
+purpose = "Record the backup demo video"
+
+[auth.github]
+kind      = "gh-login"
+scopes    = ["repo"]
+purpose   = "Post to the board and open pull requests"
+needed_by = ["board-setup", "ship"]
+
+[board]
+github         = { when = "params:mode == 'team'" }   # the local log is always on
+contracts      = ["api/openapi.yaml", "db/schema.sql", ".env.example"]
+reply_deadline = "15m"
+
+[[node]]
+id     = "ingest"
+kind   = "skill"
+skill  = "fleet/context-gathering"   # problem, rubric, tracks, sponsor APIs, submission fields
+output = { schema = "schemas/context.json", audience = "machine" }
+next   = "scout"
+
+[[node]]
+id      = "scout"
+kind    = "discovery"
+sources = ["github", "registry:npm", "registry:pypi", "web"]
+seed    = "references/scouting.toml"   # curated starting list
+next    = "kickoff"
+
+[[node]]
+id   = "kickoff"
+kind = "ask"
+ask  = { text = "Confirm both deadlines with timezone, demo format, track strategy, team skills, uncertain facts and scouting picks.", schema = "schemas/kickoff.json" }
+why  = "Deadlines, priorities and team skills are known only to the team."
+next = "checks"
+
+[[node]]
+id   = "checks"
+kind = "script"
+run  = "scripts/checks.sh"           # detect stack, validate context, one real call per sponsor key
+exit = { 0 = "pass", 1 = "fail" }
+on   = { pass = "ideate", fail = "kickoff" }
+
+[[node]]
+id       = "ideate"
+kind     = "agent"
+agent    = "fleet/ideation"
+attempts = { n = 3, select = "decider", question = "schemas/idea-rank.json" }
+output   = { schema = "schemas/ideas.json", audience = "human" }
+next     = "pick"
+
+[[node]]
+id   = "pick"
+kind = "ask"
+ask  = { text = "Pick the idea to build. Rubric scores and reasons are shown.", schema = "schemas/idea-choice.json" }
+why  = "Choosing what to build is the team's call."
+next = "spec"
+
+[[node]]
+id     = "spec"
+kind   = "agent"
+agent  = "fleet/architect"           # spec, contract paths, folder split
+route  = { allow = ["sonnet", "opus"], effort = ["medium", "high"] }
+output = { schema = "schemas/spec.json", audience = "human", semantic_check = true }
+next   = "board-setup"
+
+[[node]]
+id   = "board-setup"
+kind = "script"
+run  = "scripts/board-setup.sh"      # solo: local board; team: ownership, pinned issue, join command, wait for members
+exit = { 0 = "ready", 2 = "partial-team" }
+on   = { ready = "skeleton", partial-team = "skeleton" }
+
+[[node]]
+id        = "skeleton"
+kind      = "agent"
+agent     = "fleet/demo-skeleton"     # end-to-end demo path, stubbed and deployed early
+next      = "skeleton-check"
+
+[[node]]
+id        = "skeleton-check"
+kind      = "gate"
+run       = "scripts/deploy-smoke.sh"
+exit      = { 0 = "pass", 1 = "fail" }
+on        = { pass = "tickets", fail = "skeleton" }
+max_loops = 3
+
+[[node]]
+id     = "tickets"
+kind   = "skill"
+skill  = "fleet/vertical-slicer"     # each ticket owned by a folder owner
+output = { schema = "schemas/tickets.json", audience = "machine", semantic_check = true }
+next   = "build"
+
+[[node]]
+id       = "build"
+kind     = "parallel"
+over     = "artifact:tickets.items"
+subgraph = "slice"
+join     = { when = "all", accept = ["done", "frozen"] }   # slices merge themselves when green
+next     = "ci"
+
+[[node]]
+id   = "ci"
+kind = "sub-workflow"
+uses = "fleet/ci-cd-narrow@^1"
+mode = "headless"
+on   = { passed = "demo", test-failure = "build", build-failure = "build" }
+
+[[node]]
+id    = "demo"
+kind  = "agent"
+agent = "fleet/demo-prep"            # script, backup video, rehearsal against the deployed build
+next  = "demo-check"
+
+[[node]]
+id        = "demo-check"
+kind      = "gate"
+run       = "scripts/demo-check.sh"  # clean clone builds; URL reachable; video plays; no secrets in history
+exit      = { 0 = "pass", 1 = "fail" }
+on        = { pass = "receipts", fail = "demo" }
+max_loops = 3
+
+[[node]]
+id     = "receipts"
+kind   = "agent"
+agent  = "fleet/receipts"           # README in judge order, track mapping, honest limits
+output = { schema = "schemas/receipts.json", audience = "human", semantic_check = true }
+next   = "scoreboard"
+
+[[node]]
+id   = "scoreboard"
+kind = "script"
+run  = "scripts/scoreboard.sh"       # receipts.json and receipts.md stamped with source hashes
+next = "submission"
+
+[[node]]
+id   = "submission"
+kind = "ask"
+ask  = { text = "Review the drafted submission fields and approve or edit them.", schema = "schemas/submission.json" }
+why  = "The submission goes out under the team's names."
+next = "ship"
+
+[[node]]
+id     = "ship"
+kind   = "sub-workflow"
+uses   = "admiral/finish-line@^1"
+params = { draft = false }
+on     = { merged = "submitted", opened = "submitted", held = "submitted", abandoned = "partial", empty = "partial" }
+
+[[node]]
+id      = "submitted"
+kind    = "end"
+outcome = "submitted"
+class   = "success"
+
+[[node]]
+id      = "partial"
+kind    = "end"
+outcome = "partial"
+class   = "failure"
+
+[subgraph.slice]
+entry = "clock"
+
+[[subgraph.slice.node]]
+id         = "clock"
+kind       = "gate"
+run        = "scripts/timebox.sh"     # reads the run's budget state
+exit       = { 0 = "ok", 2 = "freeze", 3 = "freeze" }
+on         = { ok = "dev", freeze = "frozen" }
+always_run = true
+
+[[subgraph.slice.node]]
+id    = "dev"
+kind  = "agent"
+agent = "fleet/dev"
+route = { allow = ["haiku", "sonnet"], effort = ["low", "medium"] }
+next  = "check"
+
+[[subgraph.slice.node]]
+id        = "check"
+kind      = "gate"
+run       = "scripts/check.sh"        # tests, lint, secret scan, ownership
+exit      = { 0 = "pass", 1 = "fail" }
+on        = { pass = "adversary", fail = "clock" }
+max_loops = 4
+
+[[subgraph.slice.node]]
+id        = "adversary"
+kind      = "agent"
+agent     = "fleet/adversary"
+review_of = "dev"                     # different model family from dev
+output    = { schema = "schemas/findings.json", audience = "machine" }
+next      = "triage"
+
+[[subgraph.slice.node]]
+id     = "triage"
+kind   = "gate"
+decide = { question = "schemas/triage.json", input = ["artifact:findings.items[].severity", "artifact:findings.items[].summary:400"] }
+on     = { blocker = "clock", clean = "integrate" }
+
+[[subgraph.slice.node]]
+id   = "integrate"
+kind = "script"
+run  = "scripts/merge-when-green.sh"  # merge to main, contract diff, board posts, redeploy, smoke test
+exit = { 0 = "merged", 1 = "conflict", 2 = "smoke-failed" }
+on   = { merged = "done", conflict = "integrator", smoke-failed = "clock" }
+
+[[subgraph.slice.node]]
+id        = "integrator"
+kind      = "agent"
+agent     = "fleet/integrator"
+next      = "integrate"
+max_loops = 3
+
+[[subgraph.slice.node]]
+id      = "done"
+kind    = "end"
+outcome = "done"
+class   = "success"
+
+[[subgraph.slice.node]]
+id      = "frozen"
+kind    = "end"
+outcome = "frozen"
+class   = "success"
