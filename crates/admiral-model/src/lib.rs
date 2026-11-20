@@ -1,6 +1,7 @@
 use std::collections::BTreeMap;
 
 pub mod config;
+pub mod tree;
 
 /// Every JSON Schema generated from the model, keyed by file name under `schemas/`.
 ///
