@@ -1,0 +1,11 @@
+{
+  "skill": {"name": "evil", "source": "/tmp/evil", "scanned_at": "2026-11-20T10:00:00Z"},
+  "risk_assessment": {"score": 91, "severity": "CRITICAL", "recommendation": "DO_NOT_INSTALL"},
+  "components": {"static": 91},
+  "issues": [
+    {"id": "INJ-001", "category": "prompt_injection", "severity": "CRITICAL", "confidence": 0.95,
+     "location": {"file": "SKILL.md", "start_line": 3}, "surface": "instructions"}
+  ],
+  "metadata": {"skillspector_version": "0.3.1", "has_executable_scripts": false,
+               "inference_usage": {"input_tokens": 1200, "output_tokens": 300}}
+}

@@ -9,3 +9,12 @@ homepage.workspace = true
 
 [lints]
 workspace = true
+
+[dependencies]
+admiral-model = { path = "../admiral-model" }
+serde_json = "1"
+thiserror = "2"
+
+[dev-dependencies]
+tempfile = "3"
+toml.workspace = true

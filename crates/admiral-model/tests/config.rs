@@ -71,3 +71,18 @@ threshold = 40
     assert_eq!(config.max_loops, Some(3));
     assert_eq!(config.scan.unwrap().threshold, Some(40));
 }
+
+#[test]
+fn scan_table_carries_the_scanner_command_and_deep_settings() {
+    let config: Config = toml::from_str(
+        "[scan]\nthreshold = 40\ncommand = [\"skillspector\", \"scan\", \"{path}\"]\n\
+         timeout_secs = 60\ndeep_provider = \"ollama\"\ndeep_max_per_day = 5\n",
+    )
+    .unwrap();
+    let scan = serde_json::to_value(config.scan.unwrap()).unwrap();
+    assert_eq!(scan["threshold"], 40);
+    assert_eq!(scan["command"][2], "{path}");
+    assert_eq!(scan["timeout_secs"], 60);
+    assert_eq!(scan["deep_provider"], "ollama");
+    assert_eq!(scan["deep_max_per_day"], 5);
+}

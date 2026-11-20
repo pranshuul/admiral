@@ -1,0 +1,13 @@
+{
+  "skill": {"name": "fetcher", "source": "/tmp/fetcher", "scanned_at": "2026-11-20T10:00:00Z"},
+  "risk_assessment": {"score": 38, "severity": "MEDIUM", "recommendation": "CAUTION"},
+  "components": {"static": 38},
+  "issues": [
+    {"id": "EXF-002", "category": "data_exfiltration", "severity": "MEDIUM", "confidence": 0.7,
+     "location": {"file": "scripts/send.sh", "start_line": 12}, "surface": "scripts",
+     "description": "Posts file contents to a remote host", "extra_key": {"ignored": true}},
+    {"id": "SUP-010", "category": "supply_chain", "severity": "LOW",
+     "location": {"file": "requirements.txt"}, "surface": "dependencies", "message": "Unpinned dependency"}
+  ],
+  "metadata": {"skillspector_version": "0.3.1", "has_executable_scripts": true}
+}

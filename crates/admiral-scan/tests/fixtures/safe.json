@@ -1,0 +1,7 @@
+{
+  "skill": {"name": "tidy", "source": "/tmp/tidy", "scanned_at": "2026-11-20T10:00:00Z"},
+  "risk_assessment": {"score": 4, "severity": "LOW", "recommendation": "SAFE"},
+  "components": {"static": 4},
+  "issues": [],
+  "metadata": {"skillspector_version": "0.3.1", "has_executable_scripts": false}
+}
