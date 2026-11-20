@@ -120,6 +120,20 @@ pub struct Scan {
     #[schemars(range(min = 0, max = 100))]
     #[schemars(extend("x-combine" = "strictest", "x-strictest" = "lowest"))]
     pub threshold: Option<u8>,
+    /// The scanner as an argument list; the element `"{path}"` is replaced by the item's absolute
+    /// root. Run without a shell. Absent: no scanner is configured.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub command: Option<Vec<String>>,
+    /// Seconds a scan may run (default 300).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[schemars(range(min = 1))]
+    pub timeout_secs: Option<u64>,
+    /// The AI provider for deep scans, passed as `SKILLSPECTOR_PROVIDER` (default `claude_cli`).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub deep_provider: Option<String>,
+    /// Automatic deep scans allowed per day (default 20).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub deep_max_per_day: Option<u32>,
 }
 
 /// The `config/1` document.

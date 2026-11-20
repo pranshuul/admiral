@@ -1,13 +1,11 @@
 //! The scanner interface: run `[scan] command` on an item, normalize its output to `findings/1`,
 //! compare the score with the effective threshold, and escalate to an AI scan when it is needed.
 
-use std::path::Path;
-
 pub mod normalize;
 pub mod run;
 
 pub use normalize::{Normalized, skillspector};
-pub use run::{DEFAULT_COMMAND, Escalation, ScanOutcome, ScanRequest, ScanSettings, Scanned};
+pub use run::{DEFAULT_COMMAND, Escalation, ScanOutcome, ScanRequest, ScanSettings, Scanned, scan};
 
 /// A refusal with a stable code, a message and a remedy.
 ///
@@ -31,17 +29,4 @@ impl ScanError {
             remedy: remedy.to_string(),
         }
     }
-}
-
-/// Scans the item `item` (its store id) whose files are under `root`; raw reports and the
-/// `findings/1` document are saved in `out_dir`.
-pub fn scan(
-    item: &str,
-    root: &Path,
-    out_dir: &Path,
-    settings: &ScanSettings,
-    request: &ScanRequest,
-) -> Result<ScanOutcome, ScanError> {
-    let _ = (item, root, out_dir, settings, request);
-    todo!("red")
 }

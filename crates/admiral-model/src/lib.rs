@@ -13,7 +13,10 @@ pub fn schemas() -> BTreeMap<String, String> {
         "config-1.json".to_string(),
         render(&config::config_schema()),
     );
-    out.insert("findings-1.json".to_string(), findings_schema_file());
+    out.insert(
+        "findings-1.json".to_string(),
+        render(&findings::findings_schema()),
+    );
     out.insert("tree-1.json".to_string(), render(&tree::tree_schema()));
     out
 }
@@ -23,9 +26,4 @@ fn render(value: &serde_json::Value) -> String {
     let mut text = serde_json::to_string_pretty(value).expect("a JSON value always serializes");
     text.push('\n');
     text
-}
-
-/// The text of `findings-1.json`.
-fn findings_schema_file() -> String {
-    todo!("red")
 }

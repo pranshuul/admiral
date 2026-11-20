@@ -1,0 +1,179 @@
+{
+  "$defs": {
+    "Finding": {
+      "additionalProperties": false,
+      "description": "One issue a scanner reported.",
+      "properties": {
+        "category": {
+          "type": "string"
+        },
+        "confidence": {
+          "format": "double",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "id": {
+          "type": "string"
+        },
+        "location": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Location"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "message": {
+          "type": "string"
+        },
+        "severity": {
+          "$ref": "#/$defs/Severity"
+        }
+      },
+      "required": [
+        "id",
+        "category",
+        "severity",
+        "message"
+      ],
+      "type": "object"
+    },
+    "Location": {
+      "additionalProperties": false,
+      "description": "Where a finding is.",
+      "properties": {
+        "file": {
+          "type": "string"
+        },
+        "line": {
+          "format": "uint64",
+          "minimum": 1,
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "file"
+      ],
+      "type": "object"
+    },
+    "ScanMode": {
+      "description": "Which kind of scan produced the result.",
+      "oneOf": [
+        {
+          "const": "static",
+          "description": "The default command, without AI analysis.",
+          "type": "string"
+        },
+        {
+          "const": "deep",
+          "description": "A rerun with AI analysis.",
+          "type": "string"
+        }
+      ]
+    },
+    "ScannerInfo": {
+      "additionalProperties": false,
+      "description": "The scanner that produced the report.",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "version"
+      ],
+      "type": "object"
+    },
+    "Severity": {
+      "description": "How serious one finding is.",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "type": "string"
+    },
+    "Verdict": {
+      "description": "The overall judgment of a scan.",
+      "enum": [
+        "pass",
+        "warn",
+        "fail"
+      ],
+      "type": "string"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "The `findings/1` document.",
+  "properties": {
+    "escalated_because": {
+      "description": "Why a deep scan was run; empty for a static scan.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "findings": {
+      "items": {
+        "$ref": "#/$defs/Finding"
+      },
+      "type": "array"
+    },
+    "item": {
+      "description": "The store id (tree hash) of the scanned item.",
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "mode": {
+      "$ref": "#/$defs/ScanMode"
+    },
+    "raw": {
+      "description": "Path of the saved raw report.",
+      "type": "string"
+    },
+    "scanner": {
+      "$ref": "#/$defs/ScannerInfo"
+    },
+    "schema": {
+      "const": "findings/1",
+      "type": "string"
+    },
+    "score": {
+      "format": "uint8",
+      "maximum": 100,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "verdict": {
+      "$ref": "#/$defs/Verdict"
+    }
+  },
+  "required": [
+    "schema",
+    "item",
+    "scanner",
+    "score",
+    "verdict",
+    "findings",
+    "raw",
+    "mode",
+    "escalated_because"
+  ],
+  "title": "findings/1",
+  "type": "object"
+}

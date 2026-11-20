@@ -100,6 +100,32 @@
     "Scan": {
       "description": "Scanner policy.",
       "properties": {
+        "command": {
+          "description": "The scanner as an argument list; the element `\"{path}\"` is replaced by the item's absolute\nroot. Run without a shell. Absent: no scanner is configured.",
+          "items": {
+            "type": "string"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "deep_max_per_day": {
+          "description": "Automatic deep scans allowed per day (default 20).",
+          "format": "uint32",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "deep_provider": {
+          "description": "The AI provider for deep scans, passed as `SKILLSPECTOR_PROVIDER` (default `claude_cli`).",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
         "threshold": {
           "description": "Highest score (0–100) an item may have; the lower, the stricter.",
           "format": "uint8",
@@ -111,6 +137,15 @@
           ],
           "x-combine": "strictest",
           "x-strictest": "lowest"
+        },
+        "timeout_secs": {
+          "description": "Seconds a scan may run (default 300).",
+          "format": "uint64",
+          "minimum": 1,
+          "type": [
+            "integer",
+            "null"
+          ]
         }
       },
       "type": "object"

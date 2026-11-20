@@ -388,7 +388,7 @@ fn each_reason_triggers_escalation() {
     );
     // executable scripts
     let env3 = Env::new();
-    let scripts = SAFE.replace(
+    let scripts = with_issue.replace(
         "\"has_executable_scripts\": false",
         "\"has_executable_scripts\": true",
     );
@@ -398,6 +398,18 @@ fn each_reason_triggers_escalation() {
             .unwrap(),
     );
     assert_eq!(s.findings.escalated_because, ["executable_scripts"]);
+    // a clean pass with scripts and no findings is still never escalated automatically
+    let env5 = Env::new();
+    let clean_scripts = SAFE.replace(
+        "\"has_executable_scripts\": false",
+        "\"has_executable_scripts\": true",
+    );
+    let cmd = two_phase(&env5, &clean_scripts, 0, SAFE, 0);
+    let s = scanned(
+        env5.run(&env5.settings(Some(cmd), Some(90)), &ScanRequest::default())
+            .unwrap(),
+    );
+    assert_eq!(s.escalation, Escalation::NotNeeded);
     // first install from a source
     let env4 = Env::new();
     let cmd = two_phase(&env4, &with_issue, 0, SAFE, 0);

@@ -90,5 +90,5 @@ pub struct Findings {
 
 /// The `findings/1` JSON Schema as a JSON value.
 pub fn findings_schema() -> serde_json::Value {
-    todo!("red")
+    schemars::schema_for!(Findings).to_value()
 }
