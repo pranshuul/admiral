@@ -12,6 +12,7 @@ pub fn schemas() -> BTreeMap<String, String> {
         "config-1.json".to_string(),
         render(&config::config_schema()),
     );
+    out.insert("tree-1.json".to_string(), render(&tree::tree_schema()));
     out
 }
 

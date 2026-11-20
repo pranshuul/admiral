@@ -1,0 +1,60 @@
+{
+  "$defs": {
+    "TreeEntry": {
+      "additionalProperties": false,
+      "description": "One file of a tree.",
+      "properties": {
+        "mode": {
+          "$ref": "#/$defs/TreeMode"
+        },
+        "path": {
+          "description": "Path relative to the item root, `/` separated.",
+          "minLength": 1,
+          "type": "string"
+        },
+        "sha256": {
+          "description": "SHA-256 of the file's bytes, lowercase hex.",
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "mode",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "TreeMode": {
+      "description": "Whether a listed file is executable.",
+      "oneOf": [
+        {
+          "const": "x",
+          "description": "Executable: written `x` in the listing.",
+          "type": "string"
+        },
+        {
+          "const": "-",
+          "description": "Not executable: written `-` in the listing.",
+          "type": "string"
+        }
+      ]
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "The `tree/1` document: every file, sorted by path.",
+  "properties": {
+    "entries": {
+      "items": {
+        "$ref": "#/$defs/TreeEntry"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "entries"
+  ],
+  "title": "tree/1",
+  "type": "object"
+}

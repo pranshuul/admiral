@@ -30,7 +30,11 @@ pub struct TreeEntry {
 impl TreeEntry {
     /// The listing line: `<path>\0<mode>\0<sha256>\n`.
     pub fn line(&self) -> String {
-        todo!("red")
+        let mode = match self.mode {
+            TreeMode::Executable => 'x',
+            TreeMode::Plain => '-',
+        };
+        format!("{}\0{mode}\0{}\n", self.path, self.sha256)
     }
 }
 
@@ -44,11 +48,11 @@ pub struct TreeListing {
 impl TreeListing {
     /// The canonical text that is hashed: every entry's line, in order.
     pub fn render(&self) -> String {
-        todo!("red")
+        self.entries.iter().map(TreeEntry::line).collect()
     }
 }
 
 /// The `tree/1` JSON Schema as a JSON value.
 pub fn tree_schema() -> serde_json::Value {
-    todo!("red")
+    schemars::schema_for!(TreeListing).to_value()
 }
