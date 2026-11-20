@@ -1,7 +1,9 @@
 //! The content-addressed store: tree hashing, `put`, `get` and `gc`.
 
+pub mod discovery;
 pub mod error;
 pub mod gc;
+pub mod sources;
 pub mod store;
 pub mod tree;
 
